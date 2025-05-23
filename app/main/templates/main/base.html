@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Control de Combustible{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                padding: 1rem 0;
+            }
+            .navbar-nav .nav-item {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.dashboard') }}">Control Combustible</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" 
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.dashboard') }}">
+                                <i class="fas fa-home"></i> Inicio
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.new_fuel_record') }}">
+                                <i class="fas fa-plus"></i> Añadir Registro
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.fuel_history') }}">
+                                <i class="fas fa-list"></i> Lista de Registros
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.fuel_summary') }}">
+                                <i class="fas fa-chart-bar"></i> Reporte Mensual
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="navbar-text mr-3">
+                                <i class="fas fa-user"></i> {{ current_user.username }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.login') }}">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.register') }}">
+                                <i class="fas fa-user-plus"></i> Registrarse
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

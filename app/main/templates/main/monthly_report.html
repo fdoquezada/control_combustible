@@ -1,0 +1,87 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Reporte Mensual de Consumo</h2>
+        
+        {% if monthly_data %}
+        <div class="accordion" id="monthlyAccordion">
+            {% for month, data in monthly_data.items() %}
+            <div class="card">
+                <div class="card-header" id="heading{{ loop.index }}">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" 
+                                data-target="#collapse{{ loop.index }}" aria-expanded="true" 
+                                aria-controls="collapse{{ loop.index }}">
+                            {{ month }} - 
+                            Total: {{ "%.2f"|format(data.total_consumption) }} Lt - 
+                            Promedio: {{ "%.2f"|format(data.average_consumption) }} Lt
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapse{{ loop.index }}" class="collapse" aria-labelledby="heading{{ loop.index }}" 
+                     data-parent="#monthlyAccordion">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Guía</th>
+                                        <th>Patente</th>
+                                        <th>Estación</th>
+                                        <th>Suministro</th>
+                                        <th>Kms</th>
+                                        <th>Consumo (Lt)</th>
+                                        <th>Guía</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for record in data.records %}
+                                    <tr>
+                                        <td>{{ record.date.strftime('%d-%m-%Y') }}</td>
+                                        <td>{{ record.guide_number }}</td>
+                                        <td>{{ record.license_plate }}</td>
+                                        <td>{{ record.service_station }}</td>
+                                        <td>{{ record.supply }}</td>
+                                        <td>{{ record.kilometers }}</td>
+                                        <td>{{ record.consumption }}</td>
+                                        <td>
+                                            {% if record.image_filename %}
+                                            <a href="{{ url_for('static', filename='uploads/' + record.image_filename) }}" target="_blank">
+                                                Ver
+                                            </a>
+                                            {% else %}
+                                            -
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            No hay datos suficientes para generar reportes mensuales.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+// Expandir automáticamente el último mes
+$(document).ready(function() {
+    $('.collapse').first().addClass('show');
+});
+</script>
+{% endblock %}

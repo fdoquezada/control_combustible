@@ -1,0 +1,68 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Bienvenido, {{ current_user.username }}</h2>
+        <p class="lead">Panel de control del sistema de registro de combustible</p>
+    </div>
+    <div class="col-md-4 text-right">
+        <a href="{{ url_for('main.new_fuel_record') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Nuevo Registro
+        </a>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Últimos Registros</h4>
+        {% if recent_records %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Patente</th>
+                        <th>Estación</th>
+                        <th>Suministro</th>
+                        <th>Kms</th>
+                        <th>Consumo (Lt)</th>
+                        <th>Guía</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in recent_records %}
+                    <tr>
+                        <td>{{ record.date.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ record.license_plate }}</td>
+                        <td>{{ record.service_station }}</td>
+                        <td>{{ record.supply }}</td>
+                        <td>{{ record.kilometers }}</td>
+                        <td>{{ record.consumption }}</td>
+                        <td>
+                            {% if record.image_filename %}
+                            <a href="{{ url_for('static', filename='uploads/' + record.image_filename) }}" target="_blank">
+                                Ver Guía
+                            </a>
+                            {% else %}
+                            Sin imagen
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{{ url_for('main.fuel_history') }}" class="btn btn-primary">
+            Ver todos los registros
+        </a>
+        {% else %}
+        <div class="alert alert-info">
+            No hay registros de combustible. <a href="{{ url_for('main.new_fuel_record') }}">Agrega tu primer registro</a>.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

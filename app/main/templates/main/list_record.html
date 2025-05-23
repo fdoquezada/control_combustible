@@ -1,0 +1,73 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Registros de Combustible</h2>
+        
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Guía</th>
+                        <th>Patente</th>
+                        <th>Estación</th>
+                        <th>Suministro</th>
+                        <th>Kms</th>
+                        <th>Consumo (Lt)</th>
+                        <th>Guía</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record.date.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ record.guide_number }}</td>
+                        <td>{{ record.license_plate }}</td>
+                        <td>{{ record.service_station }}</td>
+                        <td>{{ record.supply }}</td>
+                        <td>{{ record.kilometers }}</td>
+                        <td>{{ record.consumption }}</td>
+                        <td>
+                            {% if record.image_filename %}
+                            <a href="{{ url_for('static', filename='uploads/' + record.image_filename) }}" target="_blank">
+                                Ver
+                            </a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if current_user.id == record.user_id or current_user.is_admin %}
+                            <form action="{{ url_for('main.delete_record', id=record.id) }}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este registro?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if prev_url %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ prev_url }}">Anterior</a>
+                </li>
+                {% endif %}
+                {% if next_url %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ next_url }}">Siguiente</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

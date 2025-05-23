@@ -1,0 +1,91 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Nuevo Registro de Combustible</h4>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data" novalidate>
+                    {{ form.hidden_tag() }}
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form.date.label(class="form-control-label") }}
+                            {{ form.date(class="form-control") }}
+                            {% for error in form.date.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form.guide_number.label(class="form-control-label") }}
+                            {{ form.guide_number(class="form-control") }}
+                            {% for error in form.guide_number.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form.license_plate.label(class="form-control-label") }}
+                            {{ form.license_plate(class="form-control") }}
+                            {% for error in form.license_plate.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form.service_station.label(class="form-control-label") }}
+                            {{ form.service_station(class="form-control") }}
+                            {% for error in form.service_station.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.supply.label(class="form-control-label") }}
+                            {{ form.supply(class="form-control") }}
+                            {% for error in form.supply.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.kilometers.label(class="form-control-label") }}
+                            {{ form.kilometers(class="form-control") }}
+                            {% for error in form.kilometers.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.consumption.label(class="form-control-label") }}
+                            {{ form.consumption(class="form-control") }}
+                            {% for error in form.consumption.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form.image.label(class="form-control-label") }}
+                        {{ form.image(class="form-control-file") }}
+                        {% for error in form.image.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                        <small class="form-text text-muted">
+                            Sube una imagen de la guía de combustible (JPG, PNG, GIF)
+                        </small>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar Registro
+                        </button>
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
